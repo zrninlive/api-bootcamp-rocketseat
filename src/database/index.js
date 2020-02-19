@@ -26,9 +26,12 @@ class Database {
 
   mongo() {
     this.mongoConnection = mongoose.connect(process.env.MONGO_URL, {
+      keepAlive: 120,
+      connectTimeoutMS: 30 * 1000,
+      socketTimeoutMS: 30 * 1000,
       useNewUrlParser: true,
-      useFindAndModify: true,
       useUnifiedTopology: true,
+      ignoreUndefined: true,
     });
   }
 }
