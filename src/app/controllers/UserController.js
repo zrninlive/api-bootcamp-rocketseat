@@ -1,6 +1,8 @@
 import User from '../models/User';
 import File from '../models/File';
 
+import Cache from '../../lib/Cache';
+
 class UserController {
   async store(req, res) {
     const userExists = await User.findOne({
@@ -14,6 +16,10 @@ class UserController {
     }
 
     const { id, name, email, provider } = await User.create(req.body);
+
+    if (provider) {
+      await Cache.invalidate('providers');
+    }
 
     return res.json({
       id,
@@ -55,8 +61,6 @@ class UserController {
         },
       ],
     });
-
-    console.log(req.body);
 
     return res.json({
       id,
